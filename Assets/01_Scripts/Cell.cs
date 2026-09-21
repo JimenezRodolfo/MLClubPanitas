@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
+    
     public static int killedCount = 0;
     public static int survivedCount = 0;
+
+    
     public CellTraits traits { get; private set; }
+
     private SpriteRenderer spriteRenderer;
-    private bool resolved = false;
+    private bool resolved = false; 
+
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
+
     public void Setup(CellTraits newTraits)
     {
         traits = newTraits;
@@ -18,28 +24,38 @@ public class Cell : MonoBehaviour
         spriteRenderer.color = traits.color;
         transform.localScale = Vector3.one * traits.size;
     }
+
     void OnMouseDown()
     {
         Kill();
     }
+
     public void Kill()
     {
-        if (!resolved)
+        if (resolved) return;
+        resolved = true;
+
+        killedCount++;
+        if (LearningManager.Instance != null)
         {
-            resolved = true;
-            killedCount++;
-            Destroy(gameObject);
+            LearningManager.Instance.RegisterResult(traits, false);
         }
+        Destroy(gameObject);
     }
+
     public void Survive()
     {
-        if (!resolved)
+        if (resolved) return;
+        resolved = true;
+
+        survivedCount++;
+        if (LearningManager.Instance != null)
         {
-            resolved = true;
-            survivedCount++;
-            Destroy(gameObject);
+            LearningManager.Instance.RegisterResult(traits, true);
         }
+        Destroy(gameObject);
     }
+
     public static void ResetCounters()
     {
         killedCount = 0;
