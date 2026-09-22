@@ -21,11 +21,17 @@ public class CellSpawner : MonoBehaviour
                 Random.Range(minY, maxY)
             );
 
-            Instantiate(
+            GameObject obj = Instantiate(
                 cellPrefab,
                 randomPosition,
                 Quaternion.identity
             );
+
+            Cell cell = obj.GetComponent<Cell>();
+            if (cell != null && LearningManager.Instance != null)
+            {
+                cell.Setup(LearningManager.Instance.GetNextTraits());
+            }
         }
     }
 

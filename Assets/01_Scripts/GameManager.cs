@@ -60,10 +60,15 @@ public class GameManager : MonoBehaviour
 
         cellSpawner.ClearCells();
 
+        if (LearningManager.Instance != null)
+        {
+            LearningManager.Instance.EndRound();
+        }
+
         roundKills = Cell.killedCount - killsBeforeRound;
         roundSurvivors = Cell.survivedCount - survivorsBeforeRound;
 
-        uiManager.ShowRoundResults(roundKills,roundSurvivors);
+        uiManager.ShowRoundResults(roundKills, roundSurvivors);
 
         StartCoroutine(NextRound());
     }
